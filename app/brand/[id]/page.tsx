@@ -80,7 +80,7 @@ export default function BrandPage() {
     const categoriesParam = filters.categories.join(",");
     const [minPrice, maxPrice] = filters.priceRange;
     //Gọi API với các filter
-    fetch(`http://localhost:5000/api/Product/Pagnation-products?categoryid=${id}&page=${page}&pageSize=${pageSize}&categories=${categoriesParam}&brands=${id}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
+    fetch(`http://localhost:5000/api/Product/Pagnation-products?categoryid=&page=${page}&pageSize=${pageSize}&categories=${categoriesParam}&brands=${id}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data.data.listProduct)

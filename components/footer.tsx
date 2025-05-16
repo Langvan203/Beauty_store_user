@@ -9,10 +9,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <Link href="/" className="inline-block mb-4">
-              <Image src="/logo-full-black-cocolux.png?height=40&width=120&text=Cocolux" alt="Cocolux" width={120} height={40} />
+              <Image src="/logokimvu.png?height=40&width=120&text=Cocolux" alt="Cocolux" width={120} height={40} />
             </Link>
             <p className="text-gray-600 text-sm mb-4">
-              Cocolux - Thương hiệu mỹ phẩm Việt Nam chất lượng cao, an toàn và hiệu quả.
+              Kim vũ store - Chuỗi cửa hàng thời trang chất lượng cao.
             </p>
             <div className="flex items-center gap-4">
               <Link href="https://facebook.com" className="text-gray-500 hover:text-pink-500">
@@ -43,7 +43,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/blog" className="text-gray-600 hover:text-pink-500">
-                  Blog làm đẹp
+                  Blog thời trang
                 </Link>
               </li>
               <li>
@@ -108,15 +108,15 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-5 w-5 text-pink-500" />
-                <a href="mailto:info@cocolux.com" className="text-gray-600 hover:text-pink-500">
-                  info@cocolux.com
+                <a href="mailto:info@kimvu.com" className="text-gray-600 hover:text-pink-500">
+                  info@kimvu.com
                 </a>
               </li>
             </ul>
           </div>
         </div>
         <div className="border-t mt-12 pt-6 text-center text-sm text-gray-600">
-          <p>© {new Date().getFullYear()} Cocolux. Tất cả các quyền được bảo lưu.</p>
+          <p>© {new Date().getFullYear()} Kim Vũ Store. Tất cả các quyền được bảo lưu.</p>
         </div>
       </div>
     </footer>

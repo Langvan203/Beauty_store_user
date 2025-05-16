@@ -20,6 +20,7 @@ interface AuthContextProps {
   login: (token: string, user: User) => void;
   logout: () => void;
   refreshUser: (customToken?: string) => Promise<void>; // Đã sửa
+  updateUserInfo: (userData: Partial<User>) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -79,9 +80,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Error refreshing user:", error);
     }
   };
+  const updateUserInfo = async (userData: Partial<User>) => {
+    if (!token || !user) return false;
+    
+    try {
+      const response = await fetch("http://localhost:5000/api/User/UpdateUserInfor", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+      });
+      
+      const data = await response.json();
+      
+      if (data.status === 1) {
+        // Update successful, refresh user data
+        await refreshUser();
+        return true;
+      } else {
+        console.error("Failed to update user information:", data.message);
+        return false;
+      }
+    } catch (error) {
+      console.error("Error updating user information:", error);
+      return false;
+    }
+  };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout, refreshUser }}>
+    <AuthContext.Provider value={{ token, user, login, logout, refreshUser,updateUserInfo }}>
       {children}
     </AuthContext.Provider>
   );

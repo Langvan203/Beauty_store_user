@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Heart, Minus, Plus, Share2, ShoppingCart, Star, Truck } from "lucide-react"
+import { Check, Heart, Minus, Plus, Share2, ShoppingCart, Star, Truck } from "lucide-react"
 import { Facebook, Twitter, Instagram } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -14,6 +14,7 @@ import { Bounce, toast } from "react-toastify"
 import { AddToCartDto } from "@/app/types/cart"
 import { useAuth } from "@/app/context/AuthContext"
 import { useCart } from "@/app/context/CartContext"
+
 import { useParams } from "next/navigation"
 
 export default function ProductPage() {
@@ -29,12 +30,23 @@ export default function ProductPage() {
   // State cho biến thể sản phẩm đã chọn
   const [selectedVariant, setSelectedVariant] = useState(productd?.variants?.[0] || null)
   const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null)
+  const [selectedColor, setSelectedColor] = useState(productd?.colors?.[0])
+
+  const handleColorChange = (color: any) => {
+    setSelectedColor(color)
+  }
   useEffect(() => {
     if (productd && productd.variants && productd.variants.length > 0) {
       // Tự động chọn variant đầu tiên có sẵn
       const defaultVariant = productd.variants[0];
       setSelectedVariant(defaultVariant);
       setSelectedVariantId(defaultVariant.variantId);
+    }
+  }, [productd]);
+  useEffect(() => {
+    if (productd && productd.colors && productd.colors.length > 0) {
+      // Tự động chọn màu đầu tiên có sẵn
+      setSelectedColor(productd.colors[0]);
     }
   }, [productd]);
   // State cho ảnh hiện tại
@@ -114,7 +126,8 @@ export default function ProductPage() {
     const addToCart: AddToCartDto = {
       productID: id,
       quantity: quantity,
-      variantID: selectedVariantId || 0
+      variantID: selectedVariantId || 0,
+      colorID: selectedColor?.colorId || 0
     }
     if (token) {
       fetch("http://localhost:5000/api/Cart/CreateNewCart", {
@@ -154,40 +167,7 @@ export default function ProductPage() {
     }
   }
   // Giả lập sản phẩm liên quan
-  const relatedProducts = [
-    {
-      id: 2,
-      name: "Serum Vitamin C Cocolux",
-      price: 650000,
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 4.5,
-      discount: 0,
-    },
-    {
-      id: 3,
-      name: "Sữa rửa mặt Cocolux Gentle",
-      price: 280000,
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 5,
-      discount: 0,
-    },
-    {
-      id: 4,
-      name: "Son lì Cocolux Matte",
-      price: 320000,
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 4,
-      discount: 10,
-    },
-    {
-      id: 5,
-      name: "Nước hoa hồng Cocolux Fresh",
-      price: 350000,
-      image: "/placeholder.svg?height=300&width=300",
-      rating: 4.7,
-      discount: 5,
-    },
-  ]
+
 
   return (
     <div className="container px-4 py-8 md:py-12">
@@ -323,11 +303,33 @@ export default function ProductPage() {
                     onClick={() => handleVariantChange(variant)}
                     disabled={variant.stock === 0}
                   >
-                    {variant.variantName}ml
+                    {variant.variantName}
                     {variant.stock === 0 && " (Hết hàng)"}
                   </Button>
                 ))}
             </div>
+          </div>
+
+          {/* Phần chọn màu sắc */}
+          <div className="mb-6">
+            <h3 className="font-medium mb-2">Màu sắc</h3>
+            <div className="flex flex-wrap gap-3">
+              {productd.colors.map((color) => (
+                <button
+                  key={color.colorId}
+                  type="button"
+                  className={`w-10 h-10 rounded-full border-2 flex items-center justify-center ${selectedColor?.colorId === color.colorId ? "border-pink-500" : "border-gray-200"
+                    }`}
+                  style={{ backgroundColor: color.colorCode }}
+                  onClick={() => handleColorChange(color)}
+                  title={color.colorName}
+                >
+                  {selectedColor?.colorId === color.colorId && <Check className="h-5 w-5 text-white" />}
+                  {/* {color.stock === 0 && <div className="absolute w-12 h-0.5 bg-gray-500 rotate-45 rounded-full"></div>} */}
+                </button>
+              ))}
+            </div>
+            <p className="text-sm text-gray-600 mt-2">Màu đã chọn: {selectedColor?.colorName}</p>
           </div>
 
           <div className="mb-4">
@@ -443,67 +445,7 @@ export default function ProductPage() {
         </TabsContent>
       </Tabs>
 
-      {/* Related Products */}
-      <div>
-        <h2 className="text-2xl font-bold mb-6">Sản phẩm liên quan</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {relatedProducts.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`}>
-              <div className="group h-full overflow-hidden border rounded-lg hover:shadow-md transition-shadow">
-                <div className="relative aspect-square">
-                  <Image
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  {product.discount > 0 && (
-                    <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">-{product.discount}%</Badge>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h3 className="font-medium text-sm line-clamp-2 mb-1 group-hover:text-pink-500 transition-colors">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center mb-2">
-                    {Array(5)
-                      .fill(0)
-                      .map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-3 w-3 ${i < product.rating ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
-                            }`}
-                        />
-                      ))}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      {product.discount > 0 ? (
-                        <>
-                          <span className="text-red-500 font-medium">
-                            {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
-                              product.price * (1 - product.discount / 100),
-                            )}
-                          </span>
-                          <span className="text-gray-400 text-xs line-through ml-1">
-                            {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
-                              product.price,
-                            )}
-                          </span>
-                        </>
-                      ) : (
-                        <span className="text-gray-900 font-medium">
-                          {new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(product.price)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
+
     </div>
   )
 }

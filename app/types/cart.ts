@@ -8,6 +8,8 @@ export interface CartItem {
   price: number;
   subTotal: number;
   variant: number;
+  colorName: string;
+  colorCode: string;
 }
 
 export interface Cart {
@@ -21,6 +23,7 @@ export interface AddToCartDto {
   productID: number;
   quantity: number;
   variantID: number;
+  colorID: number;
 }
 
 export interface CheckOutDto {

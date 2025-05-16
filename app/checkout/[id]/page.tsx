@@ -603,7 +603,7 @@ export default function CheckoutPage() {
                   <Link href="/policy/privacy" className="text-pink-500 hover:underline">
                     Chính sách bảo mật
                   </Link>{" "}
-                  của Cocolux.
+                  của Kim vũ store.
                 </p>
               </div>
             </CardContent>

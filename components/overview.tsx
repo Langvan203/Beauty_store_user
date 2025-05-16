@@ -20,8 +20,9 @@ import Link from "next/link"
 import { useAuth } from "@/app/context/AuthContext"
 import { Order } from "@/app/types/order"
 import { useOrder } from "@/app/context/OrderContext"
+import { Bounce, toast } from "react-toastify"
 export default function OverViewPage() {
-    const { user, logout } = useAuth();
+    const { user, updateUserInfo } = useAuth();
     const formatDate = (dateString: string | undefined) => {
         if (dateString) {
             const date = new Date(dateString);
@@ -30,18 +31,100 @@ export default function OverViewPage() {
     };
     const [isEditingProfile, setIsEditingProfile] = useState(false)
     const [activeTab, setActiveTab] = useState("overview")
-    const { order, orderItems, orderItemsDetail,getOrderDetails } = useOrder();
+    const { order, orderItems, orderItemsDetail, getOrderDetails } = useOrder();
     const viewOrderDetails = (id: number) => {
         getOrderDetails(id);
     }
     const [selectedOrder, setSelectedOrder] = useState<any>(null)
     const [lastOrder, setLastOrder] = useState<Order[]>([])
 
+    const [formData, setFormData] = useState({
+        userName: "",
+        email: "",
+        phone: "",
+        dateOfBirth: "",
+        gender: 1
+    });
+    const formatDateForInput = (dateString: string | undefined) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    };
+    useEffect(() => {
+        if (isEditingProfile && user) {
+            setFormData({
+                userName: user.userName || "",
+                email: user.email || "",
+                phone: user.phone || "",
+                dateOfBirth: formatDateForInput(user.dateOfBirth),
+                gender: user.gender || 1
+            });
+        }
+    }, [isEditingProfile, user]);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+    const handleGenderChange = (value: string) => {
+        const genderMap: Record<string, number> = {
+            "female": 1,
+            "male": 2,
+            "other": 3
+        };
+        setFormData(prev => ({
+            ...prev,
+            gender: genderMap[value]
+        }));
+    };
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            // Format date to ISO string for API
+            const formattedDate = formData.dateOfBirth ?
+                new Date(formData.dateOfBirth).toISOString() : undefined;
+
+            const updateData = {
+                userName: formData.userName,
+                phone: formData.phone,
+                dateOfBirth: formattedDate,
+                gender: formData.gender
+            };
+
+            const success = await updateUserInfo(updateData);
+
+            if (success) {
+                // Show success message
+                toast.success(`Cập nhật thông tin cá nhân thành công`, {
+                    position: "top-right",
+                    autoClose: 500,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                })
+                setIsEditingProfile(false);
+                // You may want to add toast notification here
+            } else {
+                // Show error message
+                // You may want to add toast notification here
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            // Show error message
+        }
+    };
     console.log(orderItemsDetail);
     useEffect(() => {
         setLastOrder(order.slice(0, 2))
     }, [order])
-    
+
     return (
         <Card>
             <CardHeader>
@@ -52,70 +135,68 @@ export default function OverViewPage() {
                 <div className="grid md:grid-cols-2 gap-6">
                     <div>
                         {isEditingProfile ? (
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <h3 className="text-lg font-medium mb-4">Cập nhật thông tin cá nhân</h3>
-                                <div className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="firstName">Họ</Label>
-                                            <Input
-                                                id="firstName"
-                                                name="firstName"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="lastName">Tên</Label>
-                                            <Input
-                                                id="lastName"
-                                                name="lastName"
-                                               
-                                                required
-                                            />
-                                        </div>
-                                    </div>
+                                <div className="space-y-2">
+
                                     <div className="space-y-2">
+                                        <Label htmlFor="userName">Họ và tên</Label>
+                                        <Input
+                                            id="userName"
+                                            name="userName"
+                                            required
+                                            value={formData.userName}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+
+
+                                    {/* <div className="space-y-2">
                                         <Label htmlFor="email">Email</Label>
                                         <Input
                                             id="email"
                                             name="email"
                                             type="email"
-                                           
+                                            value={formData.email}
                                             required
+                                            onChange={handleInputChange}
                                         />
-                                    </div>
+                                    </div> */}
                                     <div className="space-y-2">
                                         <Label htmlFor="phone">Số điện thoại</Label>
                                         <Input
                                             id="phone"
                                             name="phone"
                                             type="tel"
-                                           
+                                            value={formData.phone}
                                             required
+                                            onChange={handleInputChange}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="birthday">Ngày sinh</Label>
+                                        <Label htmlFor="dateOfBirth">Ngày sinh</Label>
                                         <Input
-                                            id="birthday"
-                                            name="birthday"
+                                            id="dateOfBirth"
+                                            name="dateOfBirth"
                                             type="date"
-                                            
+                                            value={formData.dateOfBirth}
+                                            onChange={handleInputChange}
                                         />
                                     </div>
                                     <div className="space-y-2">
                                         <Label>Giới tính</Label>
                                         <RadioGroup
-                                           
+                                            value={formData.gender === 1 ? "female" : formData.gender === 2 ? "male" : "other"}
                                             className="flex space-x-4"
+                                            onValueChange={handleGenderChange}
                                         >
                                             <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="male" id="male" />
-                                                <Label htmlFor="male">Nam</Label>
+                                                <RadioGroupItem value="female" id="female" />
+                                                <Label htmlFor="female">Nam</Label>
                                             </div>
                                             <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="female" id="female" />
-                                                <Label htmlFor="female">Nữ</Label>
+                                                <RadioGroupItem value="male" id="male" />
+                                                <Label htmlFor="male">Nữ</Label>
                                             </div>
                                             <div className="flex items-center space-x-2">
                                                 <RadioGroupItem value="other" id="other" />
@@ -158,7 +239,7 @@ export default function OverViewPage() {
                                     <div>
                                         <p className="text-sm text-gray-500">Giới tính</p>
                                         <p>
-                                            {user?.gender === 1 ? "Nữ" : "Nam"}
+                                            {user?.gender === 1 ? "Nam" : user?.gender === 2 ? "Nữ" : "Khác"}
                                         </p>
                                     </div>
                                     <div>
@@ -193,12 +274,12 @@ export default function OverViewPage() {
                                         ${order.status === "Đang chờ xử lý"
                                             ? "bg-slate-400"
                                             : order.status === "Đang giao hàng"
-                                            ? "bg-orange-400"
-                                            : order.status === "Đã hoàn thành"
-                                            ? "bg-green-400"
-                                            : order.status === "Đã hủy"
-                                            ? "bg-red-400"
-                                            : "bg-slate-700"
+                                                ? "bg-orange-400"
+                                                : order.status === "Đã hoàn thành"
+                                                    ? "bg-green-400"
+                                                    : order.status === "Đã hủy"
+                                                        ? "bg-red-400"
+                                                        : "bg-slate-700"
                                         }`}>
                                         {order.status}
                                     </span>
@@ -237,7 +318,15 @@ export default function OverViewPage() {
                                                                 <div className="flex justify-between">
                                                                     <div>
                                                                         <h3 className="font-medium">{item.productName}</h3>
-                                                                        <p className="text-sm text-gray-500">Phân loại: {item.variant+'ml'}</p>
+                                                                        <p className="text-sm text-gray-500">Kích thước: {item.variant}</p>
+                                                                        <div className="flex items-center gap-1">
+                                                                            <div
+                                                                                className="w-3 h-3 rounded-full border border-gray-300"
+                                                                                style={{ backgroundColor: item.colorCode }}
+                                                                                title={item.colorName}
+                                                                            ></div>
+                                                                            <span className="text-sm text-gray-500">{item.colorName}</span>
+                                                                        </div>
                                                                     </div>
                                                                     <p className="text-sm">x{item.quantity}</p>
                                                                 </div>

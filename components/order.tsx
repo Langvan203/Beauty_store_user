@@ -134,8 +134,17 @@ export default function OrderPage() {
                                         <div className="flex justify-between">
                                           <div>
                                             <h3 className="font-medium">{item.productName}</h3>
-                                            <p className="text-sm text-gray-500">Phân loại: {item.variant+'ml'}</p>
+                                            <p className="text-sm text-gray-500">Kích thước: {item.variant}</p>
+                                            <div className="flex items-center gap-1">
+                                              <div
+                                                className="w-3 h-3 rounded-full border border-gray-300"
+                                                style={{ backgroundColor: item.colorCode }}
+                                                title={item.colorName}
+                                              ></div>
+                                              <span className="text-sm text-gray-500">{item.colorName}</span>
+                                            </div>
                                           </div>
+
                                           <p className="text-sm">x{item.quantity}</p>
                                         </div>
                                         <div className="flex justify-between items-end mt-2">

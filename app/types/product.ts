@@ -21,6 +21,7 @@ export interface Product {
   brandID: number;
   productImages: ProductImage[];
   variants: variants[];
+  colors: colors[];
   createdDate: string;
   updatedDate: string | null;
 }
@@ -60,6 +61,12 @@ export interface variants {
   variantName: string;
   price: number;
   stock: number;
+}
+
+export interface colors {
+  colorId: number;
+  colorName: string;
+  colorCode: string;
 }
 export interface ProductPagnation {
   listProducts: ProductDetails[],

@@ -9,6 +9,8 @@ export interface OrderItem {
     discount: number;
     variant: string;
     priceOfVariant: number;
+    colorName: string;
+    colorCode: string;
   }
   
   export interface Order {

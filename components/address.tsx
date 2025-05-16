@@ -147,26 +147,6 @@ export default function AddressPage() {
                                 </Button> */}
                         </div>
                     </div>
-                    {/* <div className="border rounded-lg p-4 border-dashed flex flex-col items-center justify-center text-center">
-                        <MapPin className="h-8 w-8 text-gray-300 mb-2" />
-                        <h3 className="font-medium mb-1">Thêm địa chỉ mới</h3>
-                        <p className="text-sm text-gray-500 mb-4">Thêm địa chỉ giao hàng hoặc thanh toán mới</p>
-                        <Button
-                            variant="outline"
-                            onClick={() => {
-                                setAddressForm({
-                                    id: 0,
-                                    name: "",
-                                    phone: "",
-                                    address: "",
-                                    isDefault: false,
-                                })
-                                setIsAddingAddress(true)
-                            }}
-                        >
-                            Thêm địa chỉ
-                        </Button>
-                    </div> */}
                 </div>
 
                 {/* Dialog thêm địa chỉ mới */}
@@ -249,6 +229,7 @@ export default function AddressPage() {
                                     value={addressForm.name}
                                     onChange={handleAddressChange}
                                     required
+                                    disabled
                                 />
                             </div>
                             <div className="space-y-2">

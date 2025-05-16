@@ -40,6 +40,8 @@ interface ItemOrder {
   quantity: number;
   image: string;
   variant: string;
+  colorName: string;
+  colorCode: string;
 }
 
 interface TimeLine {
@@ -206,7 +208,7 @@ export default function OrderDetailPage() {
                 <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gray-200"></div>
                 <div className="space-y-6">
                   {order.timeLine.map((event, index) => (
-                    <div key={index+1} className="relative pl-8">
+                    <div key={index + 1} className="relative pl-8">
                       <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-white border-2 border-pink-500 flex items-center justify-center">
                         {index === order.timeLine.length - 1 ? (
                           <div className="w-2 h-2 rounded-full bg-pink-500"></div>
@@ -233,7 +235,7 @@ export default function OrderDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {order.items.map((item,index) => (
+                {order.items.map((item, index) => (
                   <div key={index} className="flex gap-4">
                     <div className="relative w-16 h-16 flex-shrink-0">
                       <Image
@@ -247,7 +249,15 @@ export default function OrderDetailPage() {
                       <div className="flex justify-between">
                         <div>
                           <h3 className="font-medium">{item.name}</h3>
-                          <p className="text-sm text-gray-500">Phân loại: {item.variant}ml</p>
+                          <p className="text-sm text-gray-500">Phân loại: {item.variant}</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <div
+                            className="w-3 h-3 rounded-full border border-gray-300"
+                            style={{ backgroundColor: item.colorCode }}
+                            title={item.colorName}
+                          ></div>
+                          <span className="text-sm text-gray-500">{item.colorName}</span>
                         </div>
                         <p className="text-sm">x{item.quantity}</p>
                       </div>
@@ -374,7 +384,7 @@ export default function OrderDetailPage() {
             <CardContent className="pt-6">
               <div className="space-y-3">
                 <Link href={"/products"}>
-                <Button className="w-full bg-pink-500 hover:bg-pink-600">Mua lại</Button>
+                  <Button className="w-full bg-pink-500 hover:bg-pink-600">Mua lại</Button>
                 </Link>
                 {order.statusCode !== 6 && ( // Hiển thị nút hủy đơn khi đơn hàng chưa bị hủy
                   <Button

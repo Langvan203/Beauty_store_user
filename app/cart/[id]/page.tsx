@@ -13,7 +13,16 @@ import { useParams } from "next/navigation"
 import { useCart } from "@/app/context/CartContext"
 import { useAuth } from "@/app/context/AuthContext"
 import { Bounce, toast } from "react-toastify"
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 export default function CartPage() {
   const params = useParams();
   const { id } = params;
@@ -24,6 +33,12 @@ export default function CartPage() {
   const { token } = useAuth();
 
 
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+  const [showClearCartDialog, setShowClearCartDialog] = useState(false);
+
+  const confirmRemoveItem = (cartItemId: number) => {
+    setItemToDelete(cartItemId);
+  };
   const updateQuantity = (cartItemId: number, newQuantity: number) => {
     if (!token) return;
 
@@ -46,9 +61,10 @@ export default function CartPage() {
   };
 
   // Hàm xóa một item khỏi giỏ hàng
-  const removeItem = (cartItemId: number) => {
-    if (!token) return;
-    fetch(`http://localhost:5000/api/Cart/remove?CartItemID=${cartItemId}`, {
+  const handleRemoveItem = () => {
+    if (!token || itemToDelete === null) return;
+
+    fetch(`http://localhost:5000/api/Cart/remove?CartItemID=${itemToDelete}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -56,7 +72,7 @@ export default function CartPage() {
     })
       .then((res) => res.json())
       .then((data) => {
-        const prn = cartItems.find((p) => p.cart_ItemID == cartItemId)?.productName
+        const prn = cartItems.find((p) => p.cart_ItemID == itemToDelete)?.productName
         toast.success(`Đã xóa thành công sản phẩm ${prn} ra khỏi giỏ hàng`, {
           position: "top-right",
           autoClose: 500,
@@ -68,32 +84,75 @@ export default function CartPage() {
           theme: "light",
           transition: Bounce,
           onClose: () => refreshCart()
-        })
-        // Cập nhật lại giỏ hàng sau khi xóa item
+        });
+        setItemToDelete(null);
       })
       .catch((err) => console.error("Error removing item:", err));
   };
 
   // Hàm xóa toàn bộ giỏ hàng
-  const clearCart = () => {
+  const confirmClearCart = () => {
+    setShowClearCartDialog(true);
+  };
+
+  // Actual clear cart function after confirmation
+  const handleClearCart = () => {
     if (!token) return;
-    fetch("http://localhost:5000/api/Cart/ClearCart", {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        // Cập nhật lại giỏ hàng sau khi xóa toàn bộ
-        refreshCart();
-      })
-      .catch((err) => console.error("Error clearing cart:", err));
+
+
+    
+    toast.success(`Đã xóa thành công giỏ hàng`, {
+          position: "top-right",
+          autoClose: 500,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          onClose: () => {
+            removeCart();
+            refreshCart()
+          }
+        });
+    setShowClearCartDialog(false);
   };
   return (
     <div className="container px-4 py-8 md:py-12">
       <h1 className="text-2xl md:text-3xl font-bold mb-6">Giỏ hàng của bạn</h1>
-
+      <AlertDialog open={itemToDelete !== null} onOpenChange={(open) => !open && setItemToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xác nhận xóa sản phẩm</AlertDialogTitle>
+            <AlertDialogDescription>
+              Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
+            <AlertDialogAction onClick={handleRemoveItem} className="bg-red-500 text-white hover:bg-red-600">
+              Xóa sản phẩm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <AlertDialog open={showClearCartDialog} onOpenChange={setShowClearCartDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xác nhận xóa giỏ hàng</AlertDialogTitle>
+            <AlertDialogDescription>
+              Bạn có chắc muốn xóa tất cả sản phẩm trong giỏ hàng?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
+            <AlertDialogAction onClick={handleClearCart} className="bg-red-500 text-white hover:bg-red-600">
+              Xóa giỏ hàng
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       {cartItems.length > 0 ? (
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -112,7 +171,16 @@ export default function CartPage() {
                     <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
                       <div>
                         <h3 className="font-medium line-clamp-1">{item.productName}</h3>
-                        <p className="text-sm text-gray-500 mb-2">Kích thước: {item.variant}ml</p>
+                        <p className="text-sm text-gray-500 mb-2">Kích thước: {item.variant}</p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-gray-500">Màu:</span>
+                        <div
+                          className="w-4 h-4 rounded-full border border-gray-300"
+                          style={{ backgroundColor: item.colorCode }}
+                          title={item.colorName}
+                        ></div>
+                        <span className="text-sm text-gray-500">{item.colorName}</span>
                       </div>
                       <div className="text-right">
                         {item.discount > 0 ? (
@@ -163,7 +231,7 @@ export default function CartPage() {
                         variant="ghost"
                         size="sm"
                         className="h-8 px-2 text-red-500 hover:text-red-700 hover:bg-red-50"
-                        onClick={() => removeItem(item.cart_ItemID)}
+                        onClick={() => confirmRemoveItem(item.cart_ItemID)}
                       >
                         <Trash2 className="h-4 w-4 mr-1" />
                         <span className="text-xs">Xóa</span>
@@ -182,10 +250,7 @@ export default function CartPage() {
                 <ShoppingBag className="mr-2 h-4 w-4" />
                 Tiếp tục mua sắm
               </Link>
-              <Button variant="outline" className="text-sm" onClick={() => {
-                removeCart()
-                refreshCart()}
-                }>
+              <Button variant="outline" className="text-sm" onClick={confirmClearCart}>
                 Xóa giỏ hàng
               </Button>
             </div>

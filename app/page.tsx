@@ -84,7 +84,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative w-full h-[500px] overflow-hidden">
         <Image
-          src="/logoto2.jpg?height=500&width=1920"
+          src="/slider_1.jpg?height=500&width=1920"
           alt="Cocolux Banner"
           fill
           className="object-cover"
@@ -95,9 +95,9 @@ export default function Home() {
             <div className="max-w-md space-y-4">
               <Badge className="bg-pink-500 hover:bg-pink-600 px-3 py-1 text-white">Mới ra mắt</Badge>
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
-                Khám phá vẻ đẹp tự nhiên cùng Cocolux
+                Khám phá vẻ đẹp thời trang cùng Kim vũ Store
               </h1>
-              <p className="text-white/90 md:text-xl">Sản phẩm mỹ phẩm chất lượng cao, an toàn và hiệu quả</p>
+              <p className="text-white/90 md:text-xl">Sản phẩm thời trang chất lượng cao</p>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 <Link href={`/products`}>
                   <Button size="lg" className="bg-pink-500 hover:bg-pink-600">
@@ -248,22 +248,22 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-6">
           <div className="relative h-64 overflow-hidden rounded-lg">
             <Image
-              src="/placeholder.svg?height=256&width=600&text=Khuyến%20mãi%20mùa%20hè"
-              alt="Khuyến mãi mùa hè"
+              src="/slider_1.jpg?height=256&width=600&text=Khuyến%20mãi%20mùa%20hè"
+              alt="Khuyến mãi mùa hè dành cho sản phẩm thời trang trẻ em"
               fill
               className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-pink-500/70 to-transparent flex items-center p-6">
               <div className="max-w-xs">
-                <h3 className="text-xl font-bold text-white mb-2">Khuyến mãi mùa hè</h3>
-                <p className="text-white/90 mb-4">Giảm đến 30% cho tất cả sản phẩm chăm sóc da</p>
+                <h3 className="text-xl font-bold text-white mb-2">Khuyến mãi mùa hè dành cho sản phẩm thời trang trẻ em</h3>
+                <p className="text-white/90 mb-4">Giảm đến 30% cho tất cả sản phẩm thời trang nam và nữ</p>
                 <Button className="bg-white text-pink-500 hover:bg-white/90">Mua ngay</Button>
               </div>
             </div>
           </div>
           <div className="relative h-64 overflow-hidden rounded-lg">
             <Image
-              src="/placeholder.svg?height=256&width=600&text=Bộ%20sản%20phẩm%20mới"
+              src="/slider_1.jpg?height=256&width=600&text=Bộ%20sản%20phẩm%20mới"
               alt="Bộ sản phẩm mới"
               fill
               className="object-cover"
@@ -271,7 +271,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500/70 to-transparent flex items-center p-6">
               <div className="max-w-xs">
                 <h3 className="text-xl font-bold text-white mb-2">Bộ sản phẩm mới</h3>
-                <p className="text-white/90 mb-4">Khám phá bộ sản phẩm chăm sóc toàn diện mới nhất</p>
+                <p className="text-white/90 mb-4">Khám phá bộ sản phẩm thời trang mới nhất</p>
                 <Button className="bg-white text-purple-500 hover:bg-white/90">Khám phá</Button>
               </div>
             </div>
@@ -310,13 +310,12 @@ export default function Home() {
       <section className="container px-4 py-12 md:px-6 md:py-16">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight mb-4">Về Cocolux</h2>
+            <h2 className="text-2xl font-bold tracking-tight mb-4">Về Kim Vũ Store</h2>
             <p className="text-gray-600 mb-4">
-              Cocolux là thương hiệu mỹ phẩm Việt Nam với sứ mệnh mang đến những sản phẩm chăm sóc da chất lượng cao, an
-              toàn và hiệu quả. Chúng tôi tin rằng vẻ đẹp tự nhiên đến từ làn da khỏe mạnh.
+              Kim Vũ Store là chuỗi thời tran Việt Nam với sứ mệnh mang đến những sản phẩm thời trang chất lượng cao. Chúng tôi tin rằng sản phẩm của mình không chỉ là những món đồ thời trang mà còn là những tác phẩm nghệ thuật, thể hiện phong cách và cá tính riêng của mỗi người.
             </p>
             <p className="text-gray-600 mb-6">
-              Với đội ngũ chuyên gia hàng đầu và công nghệ hiện đại, Cocolux không ngừng nghiên cứu và phát triển những
+              Với đội ngũ chuyên gia hàng đầu và công nghệ hiện đại, Kim Vũ Store không ngừng nghiên cứu và phát triển những
               sản phẩm phù hợp với làn da người Việt, giúp bạn tự tin tỏa sáng mỗi ngày.
             </p>
             <Button variant="outline" className="border-pink-500 text-pink-500 hover:bg-pink-50">
@@ -325,8 +324,8 @@ export default function Home() {
           </div>
           <div className="relative h-80 rounded-lg overflow-hidden">
             <Image
-              src="/cocoluxbrandlogo_1.jpg?height=320&width=600&text=Về%20Cocolux"
-              alt="Về Cocolux"
+              src="/slider_1.jpg?height=320&width=600&text=Về%20Cocolux"
+              alt="Về Kim Vũ Store"
               fill
               className="object-cover"
             />

@@ -68,13 +68,32 @@ export default function ProductFilters({ onFilterChange }: ProductFiltersProps) 
 
   // Xử lý thay đổi thương hiệu
   const handleBrandChange = (brandId: number, checked: boolean) => {
-    const updated = checked  
+    const updated = checked
       ? [...selectedBrands, brandId]
       : selectedBrands.filter(id => id !== brandId);
     setSelectedBrands(updated);
     updateFilters({ brands: updated });
   }
 
+  const handleClearFilters = () => {
+    // Reset all states to default values
+    setSelectedCategories([]);
+    setSelectedBrands([]);
+    setTempPriceRange([0, 5000000]);
+    setPriceRange([0, 5000000]);
+    setDebouncedPriceRange([0, 5000000]);
+
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox: any) => {
+      checkbox.checked = false;
+    });
+
+    onFilterChange({
+      categories: [],
+      brands: [],
+      priceRange: [0, 5000000]
+    });
+  };
   // Xử lý thay đổi giá từ slider và input
   const handlePriceChange = (val: [number, number]) => {
     setTempPriceRange(val)
@@ -122,6 +141,7 @@ export default function ProductFilters({ onFilterChange }: ProductFiltersProps) 
                 <div key={category.categoryID} className="flex items-center space-x-2">
                   <Checkbox
                     id={`category-${category.categoryID}`}
+                    checked={selectedCategories.includes(category.categoryID)}
                     onCheckedChange={(checked: any) => handleCategoryChange(category.categoryID, checked as boolean)}
                   />
                   <Label htmlFor={`category-${category.categoryID}`} className="text-sm cursor-pointer">
@@ -147,6 +167,7 @@ export default function ProductFilters({ onFilterChange }: ProductFiltersProps) 
                 <div key={brand.brandID} className="flex items-center space-x-2">
                   <Checkbox
                     id={`brand-${brand.brandID}`}
+                    checked={selectedBrands.includes(brand.brandID)}
                     onCheckedChange={(checked: any) => handleBrandChange(brand.brandID, checked as boolean)}
                   />
                   <Label htmlFor={`brand-${brand.brandID}`} className="text-sm cursor-pointer">
@@ -219,7 +240,7 @@ export default function ProductFilters({ onFilterChange }: ProductFiltersProps) 
 
       <Separator />
 
-      <Button variant="outline" size="sm" className="w-full">
+      <Button variant="outline" size="sm" onClick={handleClearFilters} className="w-full">
         Xóa bộ lọc
       </Button>
     </div>
