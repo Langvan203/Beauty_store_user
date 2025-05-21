@@ -149,10 +149,10 @@ export default function Header() {
               <nav className="grid gap-6 text-lg font-medium">
                 <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
                   <Image
-                    src="/logokimvu.png?height=40&width=120&text=Cocolux"
-                    alt="Cocolux"
-                    width={120}
-                    height={40}
+                    src="/logokimvu.png?height=70&width=300&text=KimVuStore"
+                    alt="KimVuStore"
+                    width={400}
+                    height={100}
                   />
                 </Link>
                 <Link href="/" className="hover:text-pink-500 transition-colors">
@@ -174,7 +174,7 @@ export default function Header() {
             </SheetContent>
           </Sheet>
           <Link href="/" className="flex items-center gap-2 text-lg font-semibold">
-            <Image src="/logokimvu.png?height=40&width=120&text=Cocolux" style={{ height: 100 }} alt="Cocolux" width={120} height={40} />
+            <Image src="/logokimvu.png?height=70&width=120&text=KimVuStore" style={{ height: 150 }} alt="Cocolux" width={120} height={70} />
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/" className="text-sm font-medium hover:text-pink-500 transition-colors">

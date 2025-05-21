@@ -85,7 +85,7 @@ export default function Home() {
       <section className="relative w-full h-[500px] overflow-hidden">
         <Image
           src="/slider_1.jpg?height=500&width=1920"
-          alt="Cocolux Banner"
+          alt="KimVu Store"
           fill
           className="object-cover"
           priority
@@ -165,7 +165,7 @@ export default function Home() {
                     <CardContent className="p-4">
                       <h3 className="font-medium text-sm line-clamp-2 mb-1">{product.productName}</h3>
                       <p className="text-gray-500 text-xs line-clamp-2 mb-2">
-                        {product.productDescription || "Sản phẩm chăm sóc da chất lượng cao, giúp làn da khỏe mạnh và rạng rỡ."}
+                        {product.productDescription || "San phẩm thời trang chất lượng cao"}
                       </p>
                       <div className="flex items-center justify-between">
 

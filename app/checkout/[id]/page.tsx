@@ -536,8 +536,16 @@ export default function CheckoutPage() {
                     </div>
                     <div className="flex-1">
                       <h4 className="text-sm font-medium line-clamp-1">{item.productName}</h4>
-                      <p className="text-xs text-gray-500">{item.variant}ml</p>
-                      <p className="text-xs text-gray-500">{ }</p>
+                      <p className="text-xs text-gray-500">Kích thước: {item.variant}</p>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-gray-500">Màu:</span>
+                        <div
+                          className="w-4 h-4 rounded-full border border-gray-300"
+                          style={{ backgroundColor: item.colorCode }}
+                          title={item.colorName}
+                        ></div>
+                        <span className="text-sm text-gray-500">{item.colorName}</span>
+                      </div>
                       <div className="mt-1">
                         {item.discount > 0 ? (
                           <div className="flex items-center">

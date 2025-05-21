@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <Link href="/" className="inline-block mb-4">
-              <Image src="/logokimvu.png?height=40&width=120&text=Cocolux" alt="Cocolux" width={120} height={40} />
+              <Image src="/logokimvu.png?height=100&width=300&text=KimVuStore" alt="KimVuStore" width={200} height={100} />
             </Link>
             <p className="text-gray-600 text-sm mb-4">
               Kim vũ store - Chuỗi cửa hàng thời trang chất lượng cao.

@@ -15,8 +15,8 @@ import {PaymentProvider} from "./context/PaymentMethod"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Cocolux - Mỹ phẩm chính hãng",
-  description: "Cocolux - Thương hiệu mỹ phẩm Việt Nam chất lượng cao, an toàn và hiệu quả",
+  title: "Kim vũ Store - Thời trangtrang chính hãng",
+  description: "Kim vũ StoreStore - Chuỗi thời trang Việt Nam chất lượng cao",
   generator: 'v0.dev'
 }
 
